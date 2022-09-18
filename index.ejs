@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+<link href="style.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <table>
+      <% entries.forEach(entries => { %>
+          <tr>
+            <td><%-entries.title %></td>
+            <td>
+              <button value="<%-entries.title %>" class="sub_button">-</button>
+              <input value="<%-entries.time %>" id="<%-entries.title %>" style="max-width: 80%" type="text"></input>
+              <button value="<%-entries.title %>" class="add_button">+</button>
+            </td>
+          </tr>
+      <% }) %>
+      <tr>
+          <td><input type="text" id="new_entry_title"></input></td><td><button id="add_entry_button">+</button></td>
+      </tr>
+    </table>
+    <script src="./renderer.js"></script>
+  </body>
+</html>
