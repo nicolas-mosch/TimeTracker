@@ -8,6 +8,13 @@ setButton.addEventListener('click', () => {
 document.addEventListener('click', (e) => {
     if(e.target && e.target.className == 'add_button'){
         const entryInput = document.getElementById(e.target.value)
-        entryInput.value = parseInt(entryInput.value) + 1;
+        const value = parseInt(entryInput.value)
+        window.electronAPI.updateEntry(e.target.value, value+1)
+    }
+    
+    if(e.target && e.target.className == 'sub_button'){
+        const entryInput = document.getElementById(e.target.value)
+        const value = parseInt(entryInput.value)
+        window.electronAPI.updateEntry(e.target.value, value-1)
     }
 });

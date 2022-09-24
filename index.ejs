@@ -7,13 +7,13 @@
   </head>
   <body>
     <table>
-      <% entries.forEach(entries => { %>
+      <% Object.keys(entries).forEach(function(key) { %>
           <tr>
-            <td><%-entries.title %></td>
+            <td><%- key %></td>
             <td>
-              <button value="<%-entries.title %>" class="sub_button">-</button>
-              <input value="<%-entries.time %>" id="<%-entries.title %>" style="max-width: 80%" type="text"></input>
-              <button value="<%-entries.title %>" class="add_button">+</button>
+              <button value="<%- key %>" class="sub_button">-</button>
+              <input value="<%- entries[key] %>" id="<%- key %>" class="entry_input" type="text"></input>
+              <button value="<%- key %>" class="add_button">+</button>
             </td>
           </tr>
       <% }) %>
