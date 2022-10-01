@@ -29,7 +29,6 @@ app.whenReady().then(() => {
     var dayEntries = null
     
     const configRootPath = path.join(devMode ? __dirname : path.parse(app.getAppPath('userData')).dir, "/data/config.json");
-    console.log("configRootPath", configRootPath)
     config = JSON.parse(fs.readFileSync(configRootPath, 'utf-8'));
     
     const reloadWindow = () => {
@@ -95,7 +94,6 @@ app.whenReady().then(() => {
     
     
     cron.schedule(config.reminderSchedule, () => {
-        console.log("Reminder")
         win.show()
         mainWindow.setAlwaysOnTop(true, 'screen');
     })
@@ -133,11 +131,8 @@ app.whenReady().then(() => {
     })
 
     ipcMain.on('export', (event, from, to) => {
-        console.log("Export ", from, " - ", to)
-        
         db.find({date: {$lte: to, $gte: from}}).exec(function(err, docs){
             if(err != null){console.error("error", err); return;}
-            console.log(docs)
             const workbook = new excelJS.Workbook();  // Create a new workbook
             const worksheet = workbook.addWorksheet("My Users"); // New Worksheet
             // Column for data in excel. key must match data key
@@ -161,8 +156,6 @@ app.whenReady().then(() => {
                     titleRowMap[title][docs[i].date] = docs[i].entries[title]
                 }
             }
-
-            console.log(titleRowMap)
 
             for(title in titleRowMap){
                 row = titleRowMap[title]
