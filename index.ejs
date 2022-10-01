@@ -4,23 +4,41 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
 <link href="style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="node_modules/jquery-ui/dist/themes/base/jquery-ui.min.css">
+<!-- <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css"> -->
   </head>
   <body>
+    <div id="control_panel">
     <table>
-      <% Object.keys(entries).forEach(function(key) { %>
-          <tr>
-            <td><%- key %></td>
-            <td>
-              <button value="<%- key %>" class="sub_button">-</button>
-              <input value="<%- entries[key] %>" id="<%- key %>" class="entry_input" type="text"></input>
-              <button value="<%- key %>" class="add_button">+</button>
-            </td>
-          </tr>
-      <% }) %>
       <tr>
-          <td><input type="text" id="new_entry_title"></input></td><td><button id="add_entry_button">+</button></td>
-      </tr>
-    </table>
-    <script src="./renderer.js"></script>
+          <td><input type="text" id="new_entry_title"></input></td>
+          <td><input type="text" id="date_input" value="<%- date %>"></input></td>
+          <td>
+            <button id="export_button">e</button>
+            <input type="text" id="export_from_date_input">
+            <input type="text" id="export_to_date_input">
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div id="entries">
+      <table>
+        <% Object.keys(entries).forEach(function(key) { %>
+        <tr>
+          <td><%- key %></td>
+          <td>
+            <button value="<%- key %>" class="sub_button">-</button>
+            <input value="<%- entries[key] %>" id="<%- key %>" class="entry_input" type="text"></input>
+            <button value="<%- key %>" class="add_button">+</button>
+            <button value="<%- key %>" class="del_button">x</button>
+          </td>
+        </tr>
+        <% }) %>
+      </table>
+    </div>
   </body>
+  <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="./node_modules/jquery-ui/dist/jquery-ui.min.js"></script>
+  <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="./renderer.js"></script>
 </html>

@@ -1,17 +1,37 @@
 table{
-    border: 1px solid black;
     width: 100%;
 }
 
+#control_panel table{
+    border: 1px solid black;
+    border-collapse: collapse;
+    margin-bottom: 5px;
+}
+
+#entries table, #entries th, #entries td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+#entries{
+    overflow: auto;
+}
+
+#export_from_date_input, #export_to_date_input{
+    height: 0px; width:0px; border: 0px;
+}
+
 td{
-    font-size: 20px;
     text-align: center;
+    font-size: 20px;
+    padding: 5px;
 }
 
-.entry_input{
-    width: 50%
+input{
+    width: 120px;
 }
 
-.add_button, .sub_button{
-    width: 15%
+.del_button{
+    position: relative;
+    float: right;
 }
