@@ -8,6 +8,13 @@ const cron = require('node-cron');
 
 const devMode = process.argv[2] == "dev";
 
+if (devMode) {
+    require('electron-reload')(__dirname, {
+        electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
+        hardResetMethod: 'exit'
+    });
+}
+
 const Datastore = require('nedb'), db = new Datastore({ 
     filename: path.join(devMode ? __dirname : path.parse(app.getAppPath('userData')).dir, '/data/history'),
     autoload: true 
@@ -16,8 +23,8 @@ const Datastore = require('nedb'), db = new Datastore({
 app.whenReady().then(() => {
   
     const win = new BrowserWindow({
-        width: devMode ? 800 : 400,
-        height: devMode ? 800 : 400,
+        width: devMode ? 1200 : 400,
+        height: devMode ? 1200 : 400,
         frame: false,
         titleBarStyle: 'hidden',
         show: false,
@@ -32,6 +39,7 @@ app.whenReady().then(() => {
     config = JSON.parse(fs.readFileSync(configRootPath, 'utf-8'));
     
     const reloadWindow = () => {
+        console.log("reload")
         ejs.data('date', dayEntries.date);
         ejs.data('entries', dayEntries.entries);
         win.loadFile('index.ejs')
@@ -79,14 +87,14 @@ app.whenReady().then(() => {
     tray.setContextMenu(contextMenu)
     
     win.setPosition(
-        tray.getBounds().x - (devMode ? 800 : 400),
-        tray.getBounds().y - (devMode ? 800 : 400)
+        tray.getBounds().x - (devMode ? 1200 : 400),
+        tray.getBounds().y - (devMode ? 1200 : 400)
     )
     
     tray.on('click', function(e){
         if(!win.isVisible()){
             win.show()
-            // win.webContents.openDevTools()
+            if(devMode) win.webContents.openDevTools()
         }else{
             win.hide();
         }
@@ -98,13 +106,22 @@ app.whenReady().then(() => {
         mainWindow.setAlwaysOnTop(true, 'screen');
     })
 
-    ipcMain.on('add-entry', (event, title) => {
+    ipcMain.on('add-entry', (event, title, entry) => {
+        console.log(title, entry)
+        if(entry == null){
+            entry = {
+                description: "",
+                type: "0",
+                value: 0,
+            }
+        }
+        
         if(title.length == 0){
             console.error("Title must not be empty!");
         }else if(title in dayEntries.entries){
             console.error("Title already exists!");
         }else{
-            dayEntries.entries[title] = 0
+            dayEntries.entries[title] = entry
         }
         
         db.update({date: dayEntries.date}, { $set: { entries: dayEntries.entries }}, {}, (err, numReplaced) => {
@@ -120,9 +137,9 @@ app.whenReady().then(() => {
     })
 
     ipcMain.on('update-entry', (event, title, value) => {
-        dayEntries.entries[title] = value
+        dayEntries.entries[title].value = value
         db.update({date: dayEntries.date}, { $set: { entries: dayEntries.entries }}, {}, (err, numReplaced) => {
-            reloadWindow()
+            // reloadWindow()
         })
     })
 

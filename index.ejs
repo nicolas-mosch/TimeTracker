@@ -3,42 +3,108 @@
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-<link href="style.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="node_modules/jquery-ui/dist/themes/base/jquery-ui.min.css">
-<!-- <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css"> -->
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="node_modules/jquery-ui/dist/themes/base/jquery-ui.min.css">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./node_modules/jquery-ui/dist/jquery-ui.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
   </head>
   <body>
-    <div id="control_panel">
-    <table>
-      <tr>
-          <td><input type="text" id="new_entry_title"></input></td>
-          <td><input type="text" id="date_input" value="<%- date %>"></input></td>
-          <td>
-            <button id="export_button">e</button>
-            <input type="text" id="export_from_date_input">
-            <input type="text" id="export_to_date_input">
-          </td>
-        </tr>
-      </table>
-    </div>
-    <div id="entries">
-      <table>
+    <div id="container">
+      <div id="control_panel">
+        <table class="table">
+          <tr>
+            <td>
+              <div class="input-group">
+                <input type="text" id="new_entry_title" class="form-control" placeholder="New Entry" aria-label="New Entry"></input>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" id="new_entry_options_button" data-bs-toggle="modal" data-bs-target="#myModal"><i class="bi bi-three-dots-vertical"></i></button>
+                </div>
+              </div>
+            </td>
+            <td><input type="text" id="date_input" value="<%- date %>" class="form-control"></input></td>
+            <td>
+              <button id="export_button" class="btn btn-primary"><i class="bi bi-file-earmark-spreadsheet"></i></button>
+              <div id="export_dates">
+                <input type="text" id="export_from_date_input">
+                <input type="text" id="export_to_date_input">
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="entries" class="form-group">
         <% Object.keys(entries).forEach(function(key) { %>
-        <tr>
-          <td><%- key %></td>
-          <td>
-            <button value="<%- key %>" class="sub_button">-</button>
-            <input value="<%- entries[key] %>" id="<%- key %>" class="entry_input" type="text"></input>
-            <button value="<%- key %>" class="add_button">+</button>
-            <button value="<%- key %>" class="del_button">x</button>
-          </td>
-        </tr>
+        <div class="input-group" id="<%- key %>">
+          <button class="del_button btn btn-danger"><i class="bi bi-trash"></i></button>
+          <div class="input-group-prepend" title="<%- entries[key].description %>">
+            <span class="input-group-text"><%- key %></span>
+          </div>
+          <% if(entries[key].type == "0"){ %>
+          <input value="<%- entries[key].value %>" type="number" class="form-control">
+          <% } else if(entries[key].type == "1"){ %>
+          <input type="checkbox" class="form-check-input" <% if(entries[key].value){ %>checked<% } %>>
+          <% } else if(entries[key].type == "2"){ %>
+          <input value="<%- entries[key].value %>" type="text" class="form-control">
+          <% } else if(entries[key].type == "3"){ %>
+          <select class="form-control">
+            <% entries[key].options.forEach(function(option) { %>
+            <option value="<%- option %>"<% if(option == entries[key].value){ %>selected<% } %>><%- option %></option>
+            <% }) %> 
+          </select>
+          <% } %>
+        </div>
         <% }) %>
-      </table>
+      </div>
+      <!-- Modal -->
+      <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+      
+          <!-- Modal content-->
+          <div class="modal-content">
+            <form class="was-validated" id="advanced_new_entry_form">
+              <div class="modal-header">
+                <h4 class="modal-title">New Entry (Advanced)</h4>
+              </div>
+              <div class="modal-body">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Title</span>
+                  </div>
+                  <input type="text" class="form-control" id="new_entry_title_adv" required>
+                </div>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Description</span>
+                  </div>
+                  <input type="text" class="form-control" id="new_entry_description">
+                </div>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Type</span>
+                  </div>
+                  <select class="custom-select" id="new_entry_type">
+                    <option value="0" selected>Number</option>
+                    <option value="1">Boolean</option>
+                    <option value="2">Text</option>
+                    <option value="3">Select</option>
+                  </select>
+                </div>
+                <div id="new_entry_select_options">
+                  <button class="btn btn-secondary" type="button" id="new_entry_select_add_option" ><i class="bi bi-plus-square"></i></button>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary" type="submit" id="new_entry_done_button" >Done</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
-  <script src="./node_modules/jquery/dist/jquery.min.js"></script>
-  <script src="./node_modules/jquery-ui/dist/jquery-ui.min.js"></script>
-  <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="./renderer.js"></script>
 </html>
+

@@ -2,23 +2,14 @@ table{
     width: 100%;
 }
 
-#control_panel table{
-    border: 1px solid black;
-    border-collapse: collapse;
-    margin-bottom: 5px;
-}
-
-#entries table, #entries th, #entries td {
-    border: 1px solid black;
-    border-collapse: collapse;
-}
 
 #entries{
     overflow: auto;
 }
 
-#export_from_date_input, #export_to_date_input{
-    height: 0px; width:0px; border: 0px;
+#export_dates input{
+    visibility: hidden;
+    position: absolute;
 }
 
 td{
@@ -27,11 +18,12 @@ td{
     padding: 5px;
 }
 
-input{
-    width: 120px;
-}
 
 .del_button{
     position: relative;
     float: right;
+}
+
+#new_entry_select_options{
+    display: none;
 }

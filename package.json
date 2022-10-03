@@ -1,6 +1,6 @@
 {
   "name": "timetracker",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -37,8 +37,8 @@
     },
     "extraResources": [
       {
-          "from": "data",
-          "to": "data"
+        "from": "data",
+        "to": "data"
       }
     ]
   },
@@ -54,10 +54,12 @@
   "homepage": "https://github.com/nicolas-mosch/TimeTracker#readme",
   "devDependencies": {
     "electron": "^20.1.4",
-    "electron-builder": "^23.3.3"
+    "electron-builder": "^23.3.3",
+    "electron-reload": "^2.0.0-alpha.1"
   },
   "dependencies": {
     "bootstrap": "^5.2.1",
+    "bootstrap-icons": "^1.9.1",
     "ejs-electron": "^2.1.1",
     "exceljs": "^4.3.0",
     "jquery": "^3.6.1",
