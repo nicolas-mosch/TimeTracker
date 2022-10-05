@@ -1,11 +1,10 @@
-const { app, Menu, Tray, BrowserWindow, ipcMain } = require('electron')
+const { app, Menu, Tray, BrowserWindow, ipcMain, shell } = require('electron')
 
 const excelJS = require("exceljs");
 const fs = require('fs');
 const path = require('path');
 const ejs = require('ejs-electron');
 const cron = require('node-cron');
-const { config } = require('process');
 const AutoLaunch = require('auto-launch');
 
 const devMode = process.argv[2] == "dev";
@@ -158,6 +157,10 @@ app.whenReady().then(() => {
 
     ipcMain.on('load-entries-for-day', (event, date) => {
         findOrInsertEntriesForDay(date);
+    })
+
+    ipcMain.on('open-config', (event) => {
+        shell.openPath(configRootPath);
     })
 
     ipcMain.on('export', (event, from, to) => {

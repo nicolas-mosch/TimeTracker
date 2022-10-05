@@ -91,4 +91,8 @@ $( function() {
         
         window.electronAPI.addEntry($('#new_entry_title_adv').val(), entry)
     })
+
+    $('#config_button').on('click', (e) => {
+        window.electronAPI.openConfig()
+    })
 });
