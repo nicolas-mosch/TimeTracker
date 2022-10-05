@@ -39,8 +39,8 @@
         <% Object.keys(entries).forEach(function(key) { %>
         <div class="input-group" id="<%- key %>">
           <button class="del_button btn btn-danger"><i class="bi bi-trash"></i></button>
-          <div class="input-group-prepend" title="<%- entries[key].description %>">
-            <span class="input-group-text"><%- key %></span>
+          <div class="input-group-prepend" data-toggle="tooltip" data-placement="top" title="<%- entries[key].description %>">
+            <label class="input-group-text"><%- key %></label>
           </div>
           <% if(entries[key].type == "0"){ %>
           <input value="<%- entries[key].value %>" type="number" class="form-control">

@@ -15,7 +15,6 @@ $( function() {
         }else{
             value = e.target.value
         }
-        
         window.electronAPI.updateEntry($(e.target).closest(".input-group").attr('id'), value)
     })
     

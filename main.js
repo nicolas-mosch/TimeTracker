@@ -5,13 +5,27 @@ const fs = require('fs');
 const path = require('path');
 const ejs = require('ejs-electron');
 const cron = require('node-cron');
+const { config } = require('process');
+const AutoLaunch = require('auto-launch');
 
 const devMode = process.argv[2] == "dev";
+const configRootPath = path.join(devMode ? __dirname : path.parse(app.getAppPath('userData')).dir, "/data/config.json");
+const configuration = JSON.parse(fs.readFileSync(configRootPath, 'utf-8'));
 
 if (devMode) {
     require('electron-reload')(__dirname, {
         electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
         hardResetMethod: 'exit'
+    });
+}else if(configuration.launchOnStartup){
+    var autoLauncher = new AutoLaunch({
+        name: 'TimeTracker'
+    });
+    autoLauncher.isEnabled().then(function(isEnabled) {
+        if (isEnabled) return;
+            autoLauncher.enable();
+        }).catch(function (err) {
+        throw err;
     });
 }
 
@@ -21,13 +35,13 @@ const Datastore = require('nedb'), db = new Datastore({
 });
 
 app.whenReady().then(() => {
-  
     const win = new BrowserWindow({
-        width: devMode ? 1200 : 400,
-        height: devMode ? 1200 : 400,
+        width: devMode ? 1200 : configuration.window.width,
+        height: devMode ? 1200 : configuration.window.height,
         frame: false,
         titleBarStyle: 'hidden',
         show: false,
+        skipTaskbar: true,
         webPreferences: {
             preload: __dirname + '/preload.js'
         }
@@ -35,11 +49,9 @@ app.whenReady().then(() => {
 
     var dayEntries = null
     
-    const configRootPath = path.join(devMode ? __dirname : path.parse(app.getAppPath('userData')).dir, "/data/config.json");
-    config = JSON.parse(fs.readFileSync(configRootPath, 'utf-8'));
-    
     const reloadWindow = () => {
         console.log("reload")
+        console.log(dayEntries.entries)
         ejs.data('date', dayEntries.date);
         ejs.data('entries', dayEntries.entries);
         win.loadFile('index.ejs')
@@ -54,7 +66,8 @@ app.whenReady().then(() => {
             if(docs.length > 0){
                 if(docs[0].date != date){
                     Object.keys(docs[0].entries).forEach(key => {
-                        dayEntries.entries[key] = 0;
+                        dayEntries.entries[key] = docs[0].entries[key];
+                        dayEntries.entries[key].value = 0;
                     });
                 }else{
                     dayEntries = docs[0];
@@ -101,7 +114,7 @@ app.whenReady().then(() => {
     });
     
     
-    cron.schedule(config.reminderSchedule, () => {
+    cron.schedule(configuration.reminderSchedule, () => {
         win.show()
         mainWindow.setAlwaysOnTop(true, 'screen');
     })

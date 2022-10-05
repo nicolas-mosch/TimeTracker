@@ -2,7 +2,6 @@ table{
     width: 100%;
 }
 
-
 #entries{
     overflow: auto;
 }
@@ -10,6 +9,9 @@ table{
 #export_dates input{
     visibility: hidden;
     position: absolute;
+    right: 0px;
+    top: 0px;
+
 }
 
 td{
@@ -26,4 +28,8 @@ td{
 
 #new_entry_select_options{
     display: none;
+}
+
+input[type="checkbox"]{
+    padding: 15px;
 }
