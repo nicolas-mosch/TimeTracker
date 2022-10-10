@@ -1,5 +1,5 @@
-const { app, Menu, Tray, BrowserWindow, ipcMain, shell } = require('electron')
-
+const { app, Menu, Tray, BrowserWindow, ipcMain, shell, screen } = require('electron')
+// require('update-electron-app')()
 const excelJS = require("exceljs");
 const fs = require('fs');
 const path = require('path');
@@ -10,6 +10,8 @@ const AutoLaunch = require('auto-launch');
 const devMode = process.argv[2] == "dev";
 const configRootPath = path.join(devMode ? __dirname : path.parse(app.getAppPath('userData')).dir, "/data/config.json");
 const configuration = JSON.parse(fs.readFileSync(configRootPath, 'utf-8'));
+const iconPath = path.join(__dirname, 'resources/tray-icon.png')
+var tray
 
 if (devMode) {
     require('electron-reload')(__dirname, {
@@ -34,28 +36,52 @@ const Datastore = require('nedb'), db = new Datastore({
 });
 
 app.whenReady().then(() => {
+    tray = new Tray(iconPath)
     const win = new BrowserWindow({
-        width: devMode ? 1200 : configuration.window.width,
-        height: devMode ? 1200 : configuration.window.height,
+        width: devMode ? configuration.window.width : configuration.window.width,
+        height: devMode ? configuration.window.width : configuration.window.height,
         frame: false,
         titleBarStyle: 'hidden',
         show: false,
         skipTaskbar: true,
+        alwaysOnTop: true,
         webPreferences: {
             preload: __dirname + '/preload.js'
         }
     });
 
+    win.on('blur', (e) => {
+        win.hide();
+    });
+
     var dayEntries = null
     
     const reloadWindow = () => {
-        console.log("reload")
-        console.log(dayEntries.entries)
+        var sum = 0
+        for(key in dayEntries.entries){
+            if(dayEntries.entries[key].type == '0') 
+                sum += parseFloat(dayEntries.entries[key].value)
+        }
+
+        console.log("reload", dayEntries.entries)
+        console.log("sum", sum)
         ejs.data('date', dayEntries.date);
         ejs.data('entries', dayEntries.entries);
+        ejs.data('sum', sum);
         win.loadFile('index.ejs')
         win.reload();
     };
+
+    const showWindow = () => {
+        // let bounds = screen.getPrimaryDisplay().bounds;
+        win.setPosition(
+            tray.getBounds().x - (devMode ? configuration.window.width : configuration.window.width),
+            tray.getBounds().y - (devMode ? configuration.window.width : configuration.window.height)
+            // bounds.width - configuration.window.width,
+            // bounds.height - configuration.window.height
+        )
+        win.show()
+    }
 
     const findOrInsertEntriesForDay = (date) => {
         db.find({date: {$lte: date}}).sort({ date: -1}).limit(1).exec(function(err, docs){
@@ -87,35 +113,23 @@ app.whenReady().then(() => {
 
     findOrInsertEntriesForDay((new Date()).toISOString().substring(0, 10))
 
-    const iconPath = path.join(__dirname, 'resources/tray-icon.png')
-    tray = new Tray(iconPath)
-    
     /** Context Menu */
     const contextMenu = Menu.buildFromTemplate([
       { label: 'Close', type: 'normal', role: 'quit' }
     ])
-
     tray.setToolTip('TimeTracker')
     tray.setContextMenu(contextMenu)
-    
-    win.setPosition(
-        tray.getBounds().x - (devMode ? 1200 : 400),
-        tray.getBounds().y - (devMode ? 1200 : 400)
-    )
-    
     tray.on('click', function(e){
         if(!win.isVisible()){
-            win.show()
+            showWindow();
             if(devMode) win.webContents.openDevTools()
         }else{
             win.hide();
         }
     });
     
-    
     cron.schedule(configuration.reminderSchedule, () => {
-        win.show()
-        mainWindow.setAlwaysOnTop(true, 'screen');
+        showWindow();
     })
 
     ipcMain.on('add-entry', (event, title, entry) => {
@@ -151,7 +165,7 @@ app.whenReady().then(() => {
     ipcMain.on('update-entry', (event, title, value) => {
         dayEntries.entries[title].value = value
         db.update({date: dayEntries.date}, { $set: { entries: dayEntries.entries }}, {}, (err, numReplaced) => {
-            // reloadWindow()
+            reloadWindow()
         })
     })
 
