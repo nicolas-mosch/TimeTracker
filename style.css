@@ -14,16 +14,63 @@ table{
 
 }
 
+.form-control{
+    border-radius: 0;
+}
+
+#total_display{
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+}
+
+input{
+    border: 1px solid black;
+}
+
 td{
     text-align: center;
     font-size: 20px;
-    padding: 5px;
+    padding: 2px;
 }
 
 
+#control_panel td{
+    padding: 0px
+}
+
+.del_button, .edit_button{
+    margin-right: 8px;
+    font-size: 12px;
+    position: absolute;
+    left: 1px;
+    display: none;
+}
+
 .del_button{
-    position: relative;
-    float: right;
+    top: 0px;
+}
+
+.edit_button{
+    bottom: 0px;
+}
+
+.entry-label{
+    padding-left: 15px;
+}
+
+.entry-input-group:hover .del_button{
+    display: inline;
+    transition: all .3s ease-in-out;
+}
+
+.entry-input-group:hover .edit_button{
+    display: inline;
+}
+
+#date_input{
+    min-width: 50px;
+    text-align: center;;
 }
 
 #new_entry_select_options{
@@ -32,4 +79,10 @@ td{
 
 input[type="checkbox"]{
     padding: 15px;
+}
+
+#new_entry_options_button{
+    border-left: 0px;
+    border-top-left-radius: 0%;
+    border-bottom-left-radius: 0%;
 }

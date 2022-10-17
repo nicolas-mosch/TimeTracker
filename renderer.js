@@ -95,4 +95,5 @@ $( function() {
     $('#config_button').on('click', (e) => {
         window.electronAPI.openConfig()
     })
+
 });

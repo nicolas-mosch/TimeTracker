@@ -24,29 +24,25 @@
                 </div>
               </div>
             </td>
-            <td><input type="text" id="date_input" value="<%- date %>" class="form-control"></input></td>
             <td>
-              <button id="export_button" class="btn btn-primary"><i class="bi bi-file-earmark-spreadsheet"></i></button>
+              <button id="export_button" class="btn btn-outline-secondary"><i class="bi bi-file-earmark-spreadsheet"></i></button>
               <div id="export_dates">
                 <input type="text" id="export_from_date_input">
                 <input type="text" id="export_to_date_input">
               </div>
             </td>
             <td>
-              <button id="config_button" class="btn btn-primary"><i class="bi bi-gear"></i></button>
+              <button id="config_button" class="btn btn-outline-secondary"><i class="bi bi-gear"></i></button>
             </td>
-            <td>
-              <span id="total_display" class="badge bg-secondary"><%- sum %></span>
-            </td>
+            <td><input type="text" id="date_input" value="<%- date %>" class="form-control"></input></td>
           </tr>
         </table>
       </div>
       <div id="entries" class="form-group">
         <% Object.keys(entries).forEach(function(key) { %>
-        <div class="input-group" id="<%- key %>">
-          <button class="del_button btn btn-danger"><i class="bi bi-trash"></i></button>
+        <div class="input-group entry-input-group" id="<%- key %>">
           <div class="input-group-prepend" data-toggle="tooltip" data-placement="top" title="<%- entries[key].description %>">
-            <label class="input-group-text"><%- key %></label>
+            <label class="entry-label input-group-text"><i class="del_button bi bi-trash"></i><i data-bs-toggle="modal" data-bs-target="#myModal" class="edit_button bi bi-pencil"></i><%- key %></label>
           </div>
           <% if(entries[key].type == "0"){ %>
           <input value="<%- entries[key].value %>" type="number" class="form-control">
@@ -110,6 +106,7 @@
         </div>
       </div>
     </div>
+    <span id="total_display" class="badge bg-secondary"><%- sum %></span>
   </body>
   <script src="./renderer.js"></script>
 </html>

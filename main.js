@@ -41,6 +41,7 @@ app.whenReady().then(() => {
         width: devMode ? configuration.window.width : configuration.window.width,
         height: devMode ? configuration.window.width : configuration.window.height,
         frame: false,
+        resizable: devMode,
         titleBarStyle: 'hidden',
         show: false,
         skipTaskbar: true,
@@ -50,9 +51,11 @@ app.whenReady().then(() => {
         }
     });
 
-    win.on('blur', (e) => {
-        win.hide();
-    });
+    if(!devMode){
+        win.on('blur', (e) => {
+            win.hide();
+        });
+    }
 
     var dayEntries = null
     
@@ -73,12 +76,12 @@ app.whenReady().then(() => {
     };
 
     const showWindow = () => {
-        // let bounds = screen.getPrimaryDisplay().bounds;
+        let bounds = screen.getPrimaryDisplay().bounds;
         win.setPosition(
-            tray.getBounds().x - (devMode ? configuration.window.width : configuration.window.width),
-            tray.getBounds().y - (devMode ? configuration.window.width : configuration.window.height)
-            // bounds.width - configuration.window.width,
-            // bounds.height - configuration.window.height
+            // tray.getBounds().x - (devMode ? configuration.window.width : configuration.window.width),
+            // tray.getBounds().y - (devMode ? configuration.window.width : configuration.window.height)
+            bounds.width - (configuration.window.width + 50),
+            bounds.height - (configuration.window.height + 50)
         )
         win.show()
     }
