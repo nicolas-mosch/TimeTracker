@@ -16,7 +16,8 @@ var tray
 if (devMode) {
     require('electron-reload')(__dirname, {
         electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
-        hardResetMethod: 'exit'
+        hardResetMethod: 'exit',
+        ignored: [/data|[/\\]\./]
     });
 }else if(configuration.launchOnStartup){
     var autoLauncher = new AutoLaunch({
@@ -38,8 +39,8 @@ const Datastore = require('nedb'), db = new Datastore({
 app.whenReady().then(() => {
     tray = new Tray(iconPath)
     const win = new BrowserWindow({
-        width: devMode ? configuration.window.width : configuration.window.width,
-        height: devMode ? configuration.window.width : configuration.window.height,
+        width: devMode ? 800 : configuration.window.width,
+        height: devMode ? 800 : configuration.window.height,
         frame: false,
         resizable: devMode,
         titleBarStyle: 'hidden',
@@ -78,10 +79,10 @@ app.whenReady().then(() => {
     const showWindow = () => {
         let bounds = screen.getPrimaryDisplay().bounds;
         win.setPosition(
-            // tray.getBounds().x - (devMode ? configuration.window.width : configuration.window.width),
-            // tray.getBounds().y - (devMode ? configuration.window.width : configuration.window.height)
-            bounds.width - (configuration.window.width + 50),
-            bounds.height - (configuration.window.height + 50)
+            tray.getBounds().x - (devMode ? 1200 : configuration.window.width),
+            tray.getBounds().y - (devMode ? 1200 : configuration.window.height)
+            // bounds.width - (configuration.window.width + 50),
+            // bounds.height - (configuration.window.height + 50)
         )
         win.show()
     }
@@ -167,9 +168,7 @@ app.whenReady().then(() => {
 
     ipcMain.on('update-entry', (event, title, value) => {
         dayEntries.entries[title].value = value
-        db.update({date: dayEntries.date}, { $set: { entries: dayEntries.entries }}, {}, (err, numReplaced) => {
-            reloadWindow()
-        })
+        db.update({date: dayEntries.date}, { $set: { entries: dayEntries.entries }}, {}, (err, numReplaced) => {console.log("update")})
     })
 
     ipcMain.on('load-entries-for-day', (event, date) => {
@@ -203,9 +202,10 @@ app.whenReady().then(() => {
             for(var i in docs){
                 for(var title in docs[i].entries){
                     if(!(title in titleRowMap)) titleRowMap[title] = {}
-                    titleRowMap[title][docs[i].date] = docs[i].entries[title]
+                    titleRowMap[title][docs[i].date] = docs[i].entries[title].value
                 }
             }
+            
 
             for(title in titleRowMap){
                 row = titleRowMap[title]

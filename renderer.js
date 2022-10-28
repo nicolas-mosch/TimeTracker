@@ -1,10 +1,20 @@
 const dateFormat = "yy-mm-dd"
 $( function() {
+
+    var setTotalSum = () => {
+        var sum = 0
+        console.log("setTotalSum");
+        $('input[type=number]').each((index, input)=>{
+            sum += parseFloat($(input).val())
+        })
+        $('#total_display').text(sum);
+    }
+
     $( "#date_input" ).datepicker({
         dateFormat: dateFormat
     })
 
-    $( "#date_input" ).on("change", (e) => {
+    $( "#date_input" ).on("change", (e)=>{
         console.log(e.target.value)
         window.electronAPI.loadEntriesForDay(e.target.value)
     })
@@ -15,6 +25,7 @@ $( function() {
         }else{
             value = e.target.value
         }
+        setTotalSum();
         window.electronAPI.updateEntry($(e.target).closest(".input-group").attr('id'), value)
     })
     
