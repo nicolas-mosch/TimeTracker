@@ -107,4 +107,12 @@ $( function() {
         window.electronAPI.openConfig()
     })
 
+    $( "#new_entry_title" ).autocomplete({
+        source: titles
+    });
+
+    $( "#new_entry_title_adv" ).autocomplete({
+        source: titles
+    });
+
 });

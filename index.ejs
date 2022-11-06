@@ -2,14 +2,14 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <link href="style.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="node_modules/jquery-ui/dist/themes/base/jquery-ui.min.css">
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link href="style.css" rel="stylesheet" type="text/css">
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/jquery-ui/dist/jquery-ui.min.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script>const titles=<%- JSON.stringify(titles) %></script>
   </head>
   <body>
     <div id="container">

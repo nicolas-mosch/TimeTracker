@@ -67,13 +67,23 @@ app.whenReady().then(() => {
                 sum += parseFloat(dayEntries.entries[key].value)
         }
 
-        console.log("reload", dayEntries.entries)
-        console.log("sum", sum)
-        ejs.data('date', dayEntries.date);
-        ejs.data('entries', dayEntries.entries);
-        ejs.data('sum', sum);
-        win.loadFile('index.ejs')
-        win.reload();
+        var allTitles = [];
+
+        db.find({}, { entries: 1, _id: 0 }, function (err, docs) {
+            for(i in docs){
+                for(key in docs[i].entries){
+                    if(!allTitles.includes(key)) allTitles.push(key);
+                }
+            }
+            ejs.data('date', dayEntries.date);
+            ejs.data('entries', dayEntries.entries);
+            ejs.data('sum', sum);
+            ejs.data('titles', allTitles);
+
+            win.loadFile('index.ejs')
+            win.reload();
+        });
+
     };
 
     const showWindow = () => {
