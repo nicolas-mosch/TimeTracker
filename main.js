@@ -39,12 +39,13 @@ const Datastore = require('nedb'), db = new Datastore({
 app.whenReady().then(() => {
     tray = new Tray(iconPath)
     const win = new BrowserWindow({
-        width: devMode ? 800 : configuration.window.width,
-        height: devMode ? 800 : configuration.window.height,
+        width: devMode ? 600 : configuration.window.width,
+        height: devMode ? 600 : configuration.window.height,
         frame: false,
         resizable: devMode,
         titleBarStyle: 'hidden',
         show: false,
+        transparent:true,
         skipTaskbar: true,
         alwaysOnTop: true,
         webPreferences: {
@@ -89,8 +90,8 @@ app.whenReady().then(() => {
     const showWindow = () => {
         let bounds = screen.getPrimaryDisplay().bounds;
         win.setPosition(
-            tray.getBounds().x - (devMode ? 1200 : configuration.window.width),
-            tray.getBounds().y - (devMode ? 1200 : configuration.window.height)
+            tray.getBounds().x - (devMode ? 600 : configuration.window.width),
+            tray.getBounds().y - (devMode ? 600 : configuration.window.height)
             // bounds.width - (configuration.window.width + 50),
             // bounds.height - (configuration.window.height + 50)
         )
@@ -189,7 +190,7 @@ app.whenReady().then(() => {
         shell.openPath(configRootPath);
     })
 
-    ipcMain.on('export', (event, from, to) => {
+    ipcMain.on('export', (event, from, to, file) => {
         db.find({date: {$lte: to, $gte: from}}).exec(function(err, docs){
             if(err != null){console.error("error", err); return;}
             const workbook = new excelJS.Workbook();  // Create a new workbook
@@ -228,9 +229,7 @@ app.whenReady().then(() => {
             });
             
             try {
-                workbook.xlsx.writeFile(
-                    path.join(app.getPath('home'), "Downloads/export[" + from + "-" + to + "].xlsx")
-                )
+                workbook.xlsx.writeFile(file)
               } catch (err) {
                 console.error(err)
             }

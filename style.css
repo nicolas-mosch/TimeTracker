@@ -1,9 +1,47 @@
+html{
+    background-color: rgba(0,0,0,0.5);
+}
+
 table{
     width: 100%;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+
+table .input-group{
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
+}
+
+table .input-group input{
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
+}
+
+table button {
+    color: white;
+}
+
+table button i{
+    color: white;
+}
+
+#entries input{
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
 }
 
 #entries{
     overflow: auto;
+    background-color: rgba(0,0,0,0);
+}
+
+body{
+    background-color: rgba(0,0,0,0);
+}
+
+#container{
+    background-color: rgba(0,0,0,0);
 }
 
 #export_dates input{
@@ -22,10 +60,6 @@ table{
     position: absolute;
     bottom: 3px;
     right: 3px;
-}
-
-input{
-    border: 1px solid black;
 }
 
 td{
@@ -57,6 +91,12 @@ td{
 
 .entry-label{
     padding-left: 15px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+}
+
+.entry-input-group{
+    margin-top: 2px;
 }
 
 .entry-input-group:hover .del_button{
@@ -70,7 +110,13 @@ td{
 
 #date_input{
     min-width: 50px;
-    text-align: center;;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
+}
+
+#date_input:hover{
+    cursor: pointer;
 }
 
 #new_entry_select_options{

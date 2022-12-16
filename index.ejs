@@ -20,21 +20,22 @@
               <div class="input-group">
                 <input type="text" id="new_entry_title" class="form-control" placeholder="New Entry" aria-label="New Entry"></input>
                 <div class="input-group-append">
-                  <button class="btn btn-outline-secondary" type="button" id="new_entry_options_button" data-bs-toggle="modal" data-bs-target="#myModal"><i class="bi bi-three-dots-vertical"></i></button>
+                  <button class="btn btn-outline-secondary" title="New entry advanced" type="button" id="new_entry_options_button" data-bs-toggle="modal" data-bs-target="#myModal"><i class="bi bi-three-dots-vertical"></i></button>
                 </div>
               </div>
             </td>
             <td>
-              <button id="export_button" class="btn btn-outline-secondary"><i class="bi bi-file-earmark-spreadsheet"></i></button>
+              <button id="export_button" title="Export to xlsx" class="btn btn-outline-secondary"><i class="bi bi-file-earmark-spreadsheet"></i></button>
               <div id="export_dates">
                 <input type="text" id="export_from_date_input">
                 <input type="text" id="export_to_date_input">
+                <input type="file" id="export_to_file">
               </div>
             </td>
             <td>
-              <button id="config_button" class="btn btn-outline-secondary"><i class="bi bi-gear"></i></button>
+              <button id="config_button" title="Open config file" class="btn btn-outline-secondary"><i class="bi bi-gear"></i></button>
             </td>
-            <td><input type="text" id="date_input" value="<%- date %>" class="form-control"></input></td>
+            <td><input type="text" title="Set entry date" id="date_input" value="<%- date %>" class="form-control"></input></td>
           </tr>
         </table>
       </div>
@@ -42,7 +43,11 @@
         <% Object.keys(entries).forEach(function(key) { %>
         <div class="input-group entry-input-group" id="<%- key %>">
           <div class="input-group-prepend" data-toggle="tooltip" data-placement="top" title="<%- entries[key].description %>">
-            <label class="entry-label input-group-text"><i class="del_button bi bi-trash"></i><i data-bs-toggle="modal" data-bs-target="#myModal" class="edit_button bi bi-pencil"></i><%- key %></label>
+            <label class="entry-label input-group-text">
+              <i class="del_button bi bi-trash"></i>
+              <!-- <i data-bs-toggle="modal" data-bs-target="#myModal" class="edit_button bi bi-pencil"></i> -->
+              <%- key %>
+            </label>
           </div>
           <% if(entries[key].type == "0"){ %>
           <input value="<%- entries[key].value %>" type="number" class="form-control">
