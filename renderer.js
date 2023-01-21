@@ -25,18 +25,15 @@ $( function() {
         }else{
             value = e.target.value
         }
+        id = $(e.target).closest(".entry-input-group").attr('id')
         setTotalSum();
-        window.electronAPI.updateEntry($(e.target).closest(".input-group").attr('id'), value)
+        window.electronAPI.updateEntry(id, value)
     })
     
     $( "#new_entry_title" ).on("keypress", (e) => {
         if(e.key != "Enter") return;
         const title = $("#new_entry_title").val()
         window.electronAPI.addEntry(title)
-    })
-    
-    $( ".del_button" ).on("click", (e) => {
-        window.electronAPI.removeEntry($(e.target).closest(".input-group").attr('id'))
     })
 
     $( "#export_button" ).on("click", () => {
@@ -119,4 +116,19 @@ $( function() {
         source: titles
     });
 
+
+    // Context Menu
+    var menu = new BootstrapMenu('.entry-label', {
+        fetchElementData: function($rowElem) {
+            return $rowElem
+        },
+        actions: [{
+            name: 'Delete',
+            iconClass: 'bi-trash',
+            onClick: function(e) {
+                window.electronAPI.removeEntry(e.closest(".entry-input-group").attr('id'))
+            }
+          }]
+    });
+      
 });

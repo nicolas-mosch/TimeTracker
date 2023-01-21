@@ -9,6 +9,7 @@
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/jquery-ui/dist/jquery-ui.min.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./node_modules/bootstrap-menu/dist/BootstrapMenu.min.js"></script>
     <script>const titles=<%- JSON.stringify(titles) %></script>
   </head>
   <body>
@@ -44,15 +45,13 @@
         <div class="input-group entry-input-group" id="<%- key %>">
           <div class="input-group-prepend" data-toggle="tooltip" data-placement="top" title="<%- entries[key].description %>">
             <label class="entry-label input-group-text">
-              <i class="del_button bi bi-trash"></i>
+              <!-- <i class="del_button bi bi-trash"></i> -->
               <!-- <i data-bs-toggle="modal" data-bs-target="#myModal" class="edit_button bi bi-pencil"></i> -->
               <%- key %>
             </label>
           </div>
           <% if(entries[key].type == "0"){ %>
           <input value="<%- entries[key].value %>" type="number" class="form-control">
-          <% } else if(entries[key].type == "1"){ %>
-          <input type="checkbox" class="form-check-input" <% if(entries[key].value){ %>checked<% } %>>
           <% } else if(entries[key].type == "2"){ %>
           <input value="<%- entries[key].value %>" type="text" class="form-control">
           <% } else if(entries[key].type == "3"){ %>
@@ -64,6 +63,18 @@
           <% } %>
         </div>
         <% }) %>
+        <div class="input-group btn-group btn-group-toggle" data-toggle="buttons">
+          <% Object.keys(booleans).forEach(function(key) { %>
+          <div class="entry-input-group" id="<%- key %>">
+            <input type="checkbox" class="btn-check" id="checkbox-<%- key %>" <% if(booleans[key].value){ %>checked<% } %> autocomplete="off">
+            <label class="btn entry-label btn-outline-secondary" for="checkbox-<%- key %>">
+              <!-- <i class="del_button bi bi-trash"></i> -->
+              <%- key %>
+            </label>
+          </div>
+          <% }) %>
+        </div>
+
       </div>
       <!-- Modal -->
       <div id="myModal" class="modal fade" role="dialog">

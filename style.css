@@ -1,47 +1,47 @@
 html{
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(255,255,255,0.5);
 }
 
 table{
     width: 100%;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(255, 255, 255, 0);
 }
 
 
 table .input-group{
-    background-color: rgba(0, 0, 0, 0);
-    color: white;
+    background-color: rgba(255, 255, 255, 0);
+    color: black;
 }
 
 table .input-group input{
-    background-color: rgba(0, 0, 0, 0);
-    color: white;
+    background-color: rgba(255, 255, 255, 0);
+    color: black;
 }
 
 table button {
-    color: white;
+    color: black;
 }
 
 table button i{
-    color: white;
+    color: black;
 }
 
 #entries input{
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
+    background-color: rgba(255, 255, 255, 0.7);
+    color: black;
 }
 
 #entries{
     overflow: auto;
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(255, 255, 255, 0);
 }
 
 body{
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(255, 255, 255, 0);
 }
 
 #container{
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(255, 255, 255, 0);
 }
 
 #export_dates input{
@@ -73,7 +73,7 @@ td{
     padding: 0px
 }
 
-.del_button, .edit_button{
+/* .del_button, .edit_button{
     margin-right: 8px;
     font-size: 12px;
     position: absolute;
@@ -83,7 +83,7 @@ td{
 
 .del_button{
     top: 0px;
-}
+} */
 
 .edit_button{
     bottom: 0px;
@@ -91,28 +91,30 @@ td{
 
 .entry-label{
     padding-left: 15px;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
+    background-color: rgba(255, 255, 255, 0.7);
+    color: black;
 }
 
 .entry-input-group{
     margin-top: 2px;
 }
 
-.entry-input-group:hover .del_button{
+.entry-input-group label:hover .del_button{
     display: inline;
     transition: all .3s ease-in-out;
 }
 
-.entry-input-group:hover .edit_button{
+.entry-input-group label:hover .edit_button{
     display: inline;
+    z-index: 99999999;
+    cursor: pointer;
 }
 
 #date_input{
     min-width: 50px;
     text-align: center;
-    background-color: rgba(0, 0, 0, 0);
-    color: white;
+    background-color: rgba(255, 255, 255, 0);
+    color: black;
 }
 
 #date_input:hover{
@@ -121,10 +123,6 @@ td{
 
 #new_entry_select_options{
     display: none;
-}
-
-input[type="checkbox"]{
-    padding: 15px;
 }
 
 #new_entry_options_button{

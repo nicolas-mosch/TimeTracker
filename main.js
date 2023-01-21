@@ -76,24 +76,38 @@ app.whenReady().then(() => {
                     if(!allTitles.includes(key)) allTitles.push(key);
                 }
             }
+
+            inputEntries = {}
+            for(key in dayEntries.entries){
+                if(dayEntries.entries[key].type != '1')
+                    inputEntries[key] = dayEntries.entries[key]
+            }
+
+            booleanEntries = {}
+            for(key in dayEntries.entries){
+                if(dayEntries.entries[key].type == '1')
+                    booleanEntries[key] = dayEntries.entries[key]
+            }
+
+            
             ejs.data('date', dayEntries.date);
-            ejs.data('entries', dayEntries.entries);
+            ejs.data('entries', inputEntries);
+            ejs.data('booleans', booleanEntries);
             ejs.data('sum', sum);
             ejs.data('titles', allTitles);
 
             win.loadFile('index.ejs')
             win.reload();
         });
-
     };
 
     const showWindow = () => {
         let bounds = screen.getPrimaryDisplay().bounds;
         win.setPosition(
-            tray.getBounds().x - (devMode ? 600 : configuration.window.width),
-            tray.getBounds().y - (devMode ? 600 : configuration.window.height)
-            // bounds.width - (configuration.window.width + 50),
-            // bounds.height - (configuration.window.height + 50)
+            // tray.getBounds().x - (devMode ? 600 : configuration.window.width),
+            // tray.getBounds().y - (devMode ? 600 : configuration.window.height)
+            bounds.width - ((devMode ? 600 : configuration.window.width)),
+            bounds.height - ((devMode ? 600 : configuration.window.width) + 50)
         )
         win.show()
     }
