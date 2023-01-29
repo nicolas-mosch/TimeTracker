@@ -11,6 +11,12 @@ const devMode = process.argv[2] == "dev";
 const configRootPath = path.join(devMode ? __dirname : path.parse(app.getAppPath('userData')).dir, "/data/config.json");
 const configuration = JSON.parse(fs.readFileSync(configRootPath, 'utf-8'));
 const iconPath = path.join(__dirname, 'resources/tray-icon.png')
+
+require('update-electron-app')({
+    repo: 'nicolas-mosch/TimeTracker',
+    updateInterval: '1 hour'
+  })
+
 var tray
 
 if (devMode) {
