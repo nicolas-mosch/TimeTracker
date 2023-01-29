@@ -1,8 +1,0 @@
-{
-    "reminderSchedule": "0 */2 * * *",
-    "window": {
-        "width": 400,
-        "height": 400
-    },
-    "launchOnStartup": true
-}

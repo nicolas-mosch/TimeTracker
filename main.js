@@ -7,9 +7,31 @@ const ejs = require('ejs-electron');
 const cron = require('node-cron');
 const AutoLaunch = require('auto-launch');
 
+const defaultConfig = {
+    "reminderSchedule": "0 */2 * * *",
+    "window": {
+        "width": 400,
+        "height": 400
+    },
+    "launchOnStartup": true
+}
+
 const devMode = process.argv[2] == "dev";
-const configRootPath = path.join(devMode ? __dirname : path.parse(app.getAppPath('userData')).dir, "/data/config.json");
-const configuration = JSON.parse(fs.readFileSync(configRootPath, 'utf-8'));
+
+const filepath = devMode ?
+    path.join(__dirname, "data")
+    : path.join(path.parse(app.getPath('documents')).dir, path.parse(app.getPath('documents')).base, "TimeTracker")
+
+const configPath = path.join(filepath, "config.json")
+
+if (!devMode && !fs.existsSync(filepath)){
+    fs.mkdirSync(filepath);
+}
+if (!devMode && !fs.existsSync(configPath)){
+    fs.writeFileSync(configPath, JSON.stringify(defaultConfig))
+}
+
+const configuration = devMode ? defaultConfig : JSON.parse(fs.readFileSync(configPath, 'utf-8'));
 const iconPath = path.join(__dirname, 'resources/tray-icon.png')
 
 require('update-electron-app')({
@@ -38,7 +60,7 @@ if (devMode) {
 }
 
 const Datastore = require('nedb'), db = new Datastore({ 
-    filename: path.join(devMode ? __dirname : path.parse(app.getAppPath('userData')).dir, '/data/history'),
+    filename: path.join(filepath, '/history'),
     autoload: true 
 });
 
