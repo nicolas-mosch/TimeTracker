@@ -1,4 +1,4 @@
-const { app, Menu, Tray, BrowserWindow, ipcMain, shell, screen } = require('electron')
+const { app, Menu, Tray, BrowserWindow, ipcMain, shell, screen, dialog } = require('electron')
 // require('update-electron-app')()
 const excelJS = require("exceljs");
 const fs = require('fs');
@@ -39,7 +39,7 @@ require('update-electron-app')({
     updateInterval: '1 hour'
   })
 
-var tray
+var tray, win
 
 if (devMode) {
     require('electron-reload')(__dirname, {
@@ -66,7 +66,7 @@ const Datastore = require('nedb'), db = new Datastore({
 
 app.whenReady().then(() => {
     tray = new Tray(iconPath)
-    const win = new BrowserWindow({
+    win = new BrowserWindow({
         width: devMode ? 600 : configuration.window.width,
         height: devMode ? 600 : configuration.window.height,
         frame: false,
@@ -232,50 +232,67 @@ app.whenReady().then(() => {
         shell.openPath(configRootPath);
     })
 
-    ipcMain.on('export', (event, from, to, file) => {
-        db.find({date: {$lte: to, $gte: from}}).exec(function(err, docs){
-            if(err != null){console.error("error", err); return;}
-            const workbook = new excelJS.Workbook();  // Create a new workbook
-            const worksheet = workbook.addWorksheet("My Users"); // New Worksheet
-            // Column for data in excel. key must match data key
-            var columns = [
-                { header: "Title", key: "title" }
-            ];
-            fromDate = new Date(from)
-            toDate = new Date(to)
-            counterDate = fromDate
-            while(counterDate < toDate){
-                columns.push({ header: counterDate.toISOString().substring(0, 10), key: counterDate.toISOString().substring(0, 10), width: 10})
-                counterDate.setDate(counterDate.getDate() + 1)
-            }
-
-            worksheet.columns = columns
-
-            titleRowMap = {}
-            for(var i in docs){
-                for(var title in docs[i].entries){
-                    if(!(title in titleRowMap)) titleRowMap[title] = {}
-                    titleRowMap[title][docs[i].date] = docs[i].entries[title].value
-                }
-            }
+    ipcMain.on('export', (event, from, to) => {
+        
+        let options = {
+            //Placeholder 1
+            title: "Save Exported Entries",
             
-
-            for(title in titleRowMap){
-                row = titleRowMap[title]
-                row.title = title;
-                worksheet.addRow(row)
-            }
-
-            worksheet.getRow(1).eachCell((cell) => {
-                cell.font = { bold: true };
-            });
+            //Placeholder 2
+            defaultPath : path.join(path.parse(app.getPath('documents')).dir, path.parse(app.getPath('documents')).base, (from + "_" + to)),
             
-            try {
-                workbook.xlsx.writeFile(file)
-              } catch (err) {
-                console.error(err)
-            }
-        });
+            //Placeholder 4
+            buttonLabel : "Save",
+            
+            //Placeholder 3
+            filters :[
+             {name: 'Excel Sheets', extensions: ['xlsx']}
+            ]
+           }
+        let filename = dialog.showSaveDialogSync(options)
+        console.log(filename)
+           
+        // db.find({date: {$lte: to, $gte: from}}).exec(function(err, docs){
+        //     if(err != null){console.error("error", err); return;}
+        //     const workbook = new excelJS.Workbook();  // Create a new workbook
+        //     const worksheet = workbook.addWorksheet("My Users"); // New Worksheet
+        //     // Column for data in excel. key must match data key
+        //     var columns = [
+        //         { header: "Title", key: "title" }
+        //     ];
+        //     fromDate = new Date(from)
+        //     toDate = new Date(to)
+        //     counterDate = fromDate
+        //     while(counterDate < toDate){
+        //         columns.push({ header: counterDate.toISOString().substring(0, 10), key: counterDate.toISOString().substring(0, 10), width: 10})
+        //         counterDate.setDate(counterDate.getDate() + 1)
+        //     }
 
+        //     worksheet.columns = columns
+
+        //     titleRowMap = {}
+        //     for(var i in docs){
+        //         for(var title in docs[i].entries){
+        //             if(!(title in titleRowMap)) titleRowMap[title] = {}
+        //             titleRowMap[title][docs[i].date] = docs[i].entries[title].value
+        //         }
+        //     }
+
+        //     for(title in titleRowMap){
+        //         row = titleRowMap[title]
+        //         row.title = title;
+        //         worksheet.addRow(row)
+        //     }
+
+        //     worksheet.getRow(1).eachCell((cell) => {
+        //         cell.font = { bold: true };
+        //     });
+            
+        //     try {
+        //         workbook.xlsx.writeFile(file)
+        //       } catch (err) {
+        //         console.error(err)
+        //     }
+        // });
     })
 })
