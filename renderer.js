@@ -60,12 +60,8 @@ $( function() {
         firstDay: 1
     });
 
-    $('#export_to_date_input').on("change", (e) => {
-        $("#export_to_file").click();
-    })
-
-    $('#export_to_file').on("change", (e) => {
-        window.electronAPI.export($('#export_from_date_input').val(), $('#export_to_date_input').val(), e.target.value)
+    $('#export_to_date_input').on("change", () => {
+        window.electronAPI.export($('#export_from_date_input').val(), $('#export_to_date_input').val())
         $('#export_from_date_input').val("")
         $("#export_to_date_input").val("");
     })

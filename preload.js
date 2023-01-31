@@ -5,6 +5,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     removeEntry: (title) => ipcRenderer.send('remove-entry', title),
     updateEntry: (title, value) => ipcRenderer.send('update-entry', title, value),
     loadEntriesForDay: (date) => ipcRenderer.send('load-entries-for-day', date),
-    export: (from, to) => ipcRenderer.send('export', from, to, file),
+    export: (from, to) => ipcRenderer.send('export', from, to),
     openConfig: () => ipcRenderer.send('open-config')
 })

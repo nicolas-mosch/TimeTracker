@@ -1,4 +1,4 @@
-const { app, Menu, Tray, BrowserWindow, ipcMain, shell, screen } = require('electron')
+const { app, Menu, Tray, BrowserWindow, ipcMain, shell, screen, dialog } = require('electron')
 // require('update-electron-app')()
 const excelJS = require("exceljs");
 const fs = require('fs');
@@ -39,7 +39,7 @@ require('update-electron-app')({
     updateInterval: '1 hour'
   })
 
-var tray
+var tray, win
 
 if (devMode) {
     require('electron-reload')(__dirname, {
@@ -66,7 +66,7 @@ const Datastore = require('nedb'), db = new Datastore({
 
 app.whenReady().then(() => {
     tray = new Tray(iconPath)
-    const win = new BrowserWindow({
+    win = new BrowserWindow({
         width: devMode ? 600 : configuration.window.width,
         height: devMode ? 600 : configuration.window.height,
         frame: false,
@@ -232,7 +232,25 @@ app.whenReady().then(() => {
         shell.openPath(configRootPath);
     })
 
-    ipcMain.on('export', (event, from, to, file) => {
+    ipcMain.on('export', (event, from, to) => {
+        
+        let options = {
+            //Placeholder 1
+            title: "Save Exported Entries",
+            
+            //Placeholder 2
+            defaultPath : path.join(path.parse(app.getPath('documents')).dir, path.parse(app.getPath('documents')).base, (from + "_" + to)),
+            
+            //Placeholder 4
+            buttonLabel : "Save",
+            
+            //Placeholder 3
+            filters :[
+             {name: 'Excel Sheets', extensions: ['xlsx']}
+            ]
+           }
+        let file = dialog.showSaveDialogSync(options)
+           
         db.find({date: {$lte: to, $gte: from}}).exec(function(err, docs){
             if(err != null){console.error("error", err); return;}
             const workbook = new excelJS.Workbook();  // Create a new workbook
@@ -258,7 +276,6 @@ app.whenReady().then(() => {
                     titleRowMap[title][docs[i].date] = docs[i].entries[title].value
                 }
             }
-            
 
             for(title in titleRowMap){
                 row = titleRowMap[title]
@@ -276,6 +293,5 @@ app.whenReady().then(() => {
                 console.error(err)
             }
         });
-
     })
 })
