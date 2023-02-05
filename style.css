@@ -1,20 +1,12 @@
-html{
-    background-color: rgba(255,255,255,0.5);
-}
-
 table{
     width: 100%;
-    background-color: rgba(255, 255, 255, 0);
 }
 
-
 table .input-group{
-    background-color: rgba(255, 255, 255, 0);
     color: black;
 }
 
 table .input-group input{
-    background-color: rgba(255, 255, 255, 0);
     color: black;
 }
 
@@ -27,21 +19,11 @@ table button i{
 }
 
 #entries input{
-    background-color: rgba(255, 255, 255, 0.7);
     color: black;
 }
 
 #entries{
     overflow: auto;
-    background-color: rgba(255, 255, 255, 0);
-}
-
-body{
-    background-color: rgba(255, 255, 255, 0);
-}
-
-#container{
-    background-color: rgba(255, 255, 255, 0);
 }
 
 #export_dates input{
@@ -133,4 +115,12 @@ td{
 
 .ui-front{
     z-index: 10000;
+}
+
+.ui-datepicker{
+    z-index: 1;
+}
+
+.input-group{
+    z-index: 0;
 }

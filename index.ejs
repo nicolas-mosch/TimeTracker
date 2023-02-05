@@ -11,6 +11,13 @@
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="./node_modules/bootstrap-menu/dist/BootstrapMenu.min.js"></script>
     <script>const titles=<%- JSON.stringify(titles) %></script>
+    <% if(opaque){ %>
+    <style>
+      * {
+        background-color: rgba(255,255,255,0.3) !important; 
+      }
+    </style>
+    <% } %>
   </head>
   <body>
     <div id="container">

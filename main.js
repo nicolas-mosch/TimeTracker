@@ -8,7 +8,7 @@ const cron = require('node-cron');
 const AutoLaunch = require('auto-launch');
 
 const defaultConfig = {
-    "reminderSchedule": "0 */2 * * *",
+    "reminderSchedule": "* * * * *",
     "window": {
         "width": 400,
         "height": 400
@@ -81,15 +81,9 @@ app.whenReady().then(() => {
         }
     });
 
-    if(!devMode){
-        win.on('blur', (e) => {
-            win.hide();
-        });
-    }
-
     var dayEntries = null
     
-    const reloadWindow = () => {
+    const reloadWindow = (opaque = false) => {
         var sum = 0
         for(key in dayEntries.entries){
             if(dayEntries.entries[key].type == '0') 
@@ -123,13 +117,14 @@ app.whenReady().then(() => {
             ejs.data('booleans', booleanEntries);
             ejs.data('sum', sum);
             ejs.data('titles', allTitles);
+            ejs.data('opaque', opaque);
 
             win.loadFile('index.ejs')
             win.reload();
         });
     };
 
-    const showWindow = () => {
+    const showWindow = (showInactive = false) => {
         let bounds = screen.getPrimaryDisplay().bounds;
         win.setPosition(
             // tray.getBounds().x - (devMode ? 600 : configuration.window.width),
@@ -137,8 +132,26 @@ app.whenReady().then(() => {
             bounds.width - ((devMode ? 600 : configuration.window.width)),
             bounds.height - ((devMode ? 600 : configuration.window.width) + 50)
         )
-        win.show()
+        if(showInactive) win.showInactive()
+        else win.show()
     }
+
+    win.on('focus', () => {
+        console.log('focus');
+        reloadWindow();
+    });
+
+    win.on('blur', () => {
+        console.log('blur');
+        win.hide();
+    });
+
+    cron.schedule(configuration.reminderSchedule, () => {
+        if(!win.isVisible()){
+            reloadWindow(true);
+            showWindow(true);
+        }
+    })
 
     const findOrInsertEntriesForDay = (date) => {
         db.find({date: {$lte: date}}).sort({ date: -1}).limit(1).exec(function(err, docs){
@@ -184,10 +197,6 @@ app.whenReady().then(() => {
             win.hide();
         }
     });
-    
-    cron.schedule(configuration.reminderSchedule, () => {
-        showWindow();
-    })
 
     ipcMain.on('add-entry', (event, title, entry) => {
         console.log(title, entry)
