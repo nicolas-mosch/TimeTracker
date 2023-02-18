@@ -28,8 +28,13 @@
               <div class="input-group">
                 <input type="text" id="new_entry_title" class="form-control" placeholder="New Entry" aria-label="New Entry"></input>
                 <div class="input-group-append">
+                  <select id="quick_new_entry_type" class="form-select form-select-sm" style="height: 100%">
+                    <option value="1">Boolean</option>
+                    <option value="0">Number</option>
+                    <option value="2">Text</option>
+                  </select>
+                  </div>
                   <button class="btn btn-outline-secondary" title="New entry advanced" type="button" id="new_entry_options_button" data-bs-toggle="modal" data-bs-target="#myModal"><i class="bi bi-three-dots-vertical"></i></button>
-                </div>
               </div>
             </td>
             <td>
@@ -117,8 +122,11 @@
                   </select>
                 </div>
                 <div id="new_entry_select_options">
-                  <button class="btn btn-secondary" type="button" id="new_entry_select_add_option" ><i class="bi bi-plus-square"></i></button>
+                  <input type="text" class="new_entry_select_option" required>
+                  <input type="text" class="new_entry_select_option" required>
+                  <input type="text" class="new_entry_select_option" required>
                 </div>
+                <button class="btn btn-secondary" type="button" id="new_entry_select_add_option" ><i class="bi bi-plus-square"></i></button>
               </div>
               <div class="modal-footer">
                 <button class="btn btn-primary" type="submit" id="new_entry_done_button" >Done</button>

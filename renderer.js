@@ -33,7 +33,12 @@ $( function() {
     $( "#new_entry_title" ).on("keypress", (e) => {
         if(e.key != "Enter") return;
         const title = $("#new_entry_title").val()
-        window.electronAPI.addEntry(title)
+        const entry = {
+            description: "",
+            type: $('#quick_new_entry_type').val(),
+            value: ""
+        };
+        window.electronAPI.addEntry(title, entry)
     })
 
     $( "#export_button" ).on("click", () => {
@@ -68,19 +73,16 @@ $( function() {
     
     $('#new_entry_type').on("change", (e) => {
         if(e.target.value == "3"){
-            for(i = 0; i < 3; ++i)
-                $("#new_entry_select_options").prepend('<input type="text" class="new_entry_select_option" required>')
             $("#new_entry_select_options").show()
+            $("#new_entry_select_add_option").show()
         }else{
             $("#new_entry_select_options").hide()
-            $("#new_entry_select_options").html(
-                '<button class="btn btn-secondary" type="button" id="new_entry_select_add_option" ><i class="bi bi-plus-square"></i></button>'
-            )
+            $("#new_entry_select_add_option").hide()
         }
     })
 
     $('#new_entry_select_add_option').on("click", (e) => {
-        $("#new_entry_select_options").prepend('<input type="text" class="new_entry_select_option" required>')
+        $("#new_entry_select_options").append('<input type="text" class="new_entry_select_option" required>')
     })
 
     $('#advanced_new_entry_form').on('submit', (e) => {

@@ -137,12 +137,10 @@ app.whenReady().then(() => {
     }
 
     win.on('focus', () => {
-        console.log('focus');
         reloadWindow();
     });
 
     win.on('blur', () => {
-        console.log('blur');
         win.hide();
     });
 
@@ -199,11 +197,10 @@ app.whenReady().then(() => {
     });
 
     ipcMain.on('add-entry', (event, title, entry) => {
-        console.log(title, entry)
         if(entry == null){
             entry = {
                 description: "",
-                type: "0",
+                type: "1",
                 value: 0,
             }
         }
@@ -230,7 +227,7 @@ app.whenReady().then(() => {
 
     ipcMain.on('update-entry', (event, title, value) => {
         dayEntries.entries[title].value = value
-        db.update({date: dayEntries.date}, { $set: { entries: dayEntries.entries }}, {}, (err, numReplaced) => {console.log("update")})
+        db.update({date: dayEntries.date}, { $set: { entries: dayEntries.entries }}, {}, (err, numReplaced) => {})
     })
 
     ipcMain.on('load-entries-for-day', (event, date) => {

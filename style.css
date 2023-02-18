@@ -107,6 +107,10 @@ td{
     display: none;
 }
 
+#new_entry_select_add_option{
+    display: none;
+}
+
 #new_entry_options_button{
     border-left: 0px;
     border-top-left-radius: 0%;
